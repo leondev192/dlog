@@ -173,8 +173,8 @@
 }
 
 .presentation-title {
-  font-size: 5em;
-  font-weight: 700;
+  font-size: 7em;
+  font-weight: bold;
   margin: 0;
   color: #ffffff;
   background: #fbf8ec;
@@ -268,5 +268,10 @@
     #media {
       height: 100%;
     }
+  }
+}
+@media (max-width: 1200px) {
+  .presentation-title {
+    font-size: 4em;
   }
 }
