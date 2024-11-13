@@ -216,48 +216,6 @@ export const exportToExcel = async (aiResponse) => {
 
     // Thêm hàng tiêu đề
     const headerRow = worksheet.addRow(columnHeaders);
-    // Tiêu đề bảng 2 (B6 - G6)
-    // Tiêu đề bảng 2 (B6 - G6)
-    const secondHeader = [
-      "Mã hàng\nHS code if avail", // B6
-      "Mô tả hàng hóa*\nDescription of Goods", // C6
-      "Tổng trọng lượng*\nGross weight", // D6
-      "Kích thước/thể tích *\nDimension/tonnage", // E6
-      "Số hiệu cont\nCont. number", // F6
-      "Số seal cont\nSeal number", // G6
-    ];
-
-    // Đảm bảo dòng 6 được định dạng chính xác
-    worksheet.spliceRows(6, 1); // Xóa dòng cũ tại vị trí 6 (nếu có) để đảm bảo không có xung đột
-
-    // Thêm tiêu đề bảng 2
-    const secondHeaderRow = worksheet.addRow(secondHeader);
-
-    // Định dạng tiêu đề bảng 2
-    secondHeaderRow.eachCell((cell, colNumber) => {
-      cell.font = { bold: true, color: { argb: "FFFFFFFF" }, size: 12 }; // Font trắng, chữ in đậm
-      cell.alignment = {
-        horizontal: "center",
-        vertical: "middle",
-        wrapText: true, // Tự động xuống dòng nếu quá dài
-      };
-      cell.fill = {
-        type: "pattern",
-        pattern: "solid",
-        fgColor: { argb: "0070C0" }, // Màu nền xanh
-      };
-
-      // Tạo viền xung quanh ô
-      cell.border = {
-        top: { style: "thin" },
-        left: { style: "thin" },
-        bottom: { style: "thin" },
-        right: { style: "thin" },
-      };
-
-      // Đặt độ rộng cột
-      worksheet.getColumn(colNumber + 2).width = 25; // Độ rộng tương ứng với cột (thêm 2 vì cột B bắt đầu ở index 2)
-    });
 
     // Định dạng tiêu đề cột
     headerRow.eachCell((cell) => {
@@ -288,11 +246,7 @@ export const exportToExcel = async (aiResponse) => {
         key: "Bill of Lading No.",
         header: "Bill of Lading No.",
       },
-      {
-        position: "C7",
-        key: "Description of Goods",
-        header: "Description of Goods",
-      },
+
       { position: "E4", key: "Consignor/Shipper", header: "Consignor/Shipper" },
       {
         position: "F4",
@@ -312,10 +266,7 @@ export const exportToExcel = async (aiResponse) => {
         header: "Number of Packages",
       },
       { position: "U4", key: "Kind of Packages", header: "Kind of Packages" },
-      { position: "F7", key: "Container No.", header: "Container No." },
-      { position: "G7", key: "Seal No.", header: "Seal No." },
-      { position: "D7", key: "Gross Weight", header: "Gross Weight" },
-      { position: "E7", key: "CBM/Volume", header: "CBM/Volume" },
+
       {
         position: "P4",
         key: "Place and Date of Issue",
@@ -340,6 +291,16 @@ export const exportToExcel = async (aiResponse) => {
       },
       { position: "J4", key: "Port of Discharge", header: "Port of Discharge" },
       { position: "G4", key: "Notify Party", header: "Notify Party" },
+
+      { position: "F8", key: "Container No.", header: "Container No." },
+      { position: "G8", key: "Seal No.", header: "Seal No." },
+      { position: "D8", key: "Gross Weight", header: "Gross Weight" },
+      { position: "E8", key: "CBM/Volume", header: "CBM/Volume" },
+      {
+        position: "C8",
+        key: "Description of Goods",
+        header: "Description of Goods",
+      },
     ];
 
     fieldsMapping.forEach(({ position, key, header }) => {
@@ -358,6 +319,47 @@ export const exportToExcel = async (aiResponse) => {
         pattern: "solid",
         fgColor: { argb: "E7E6E6" },
       };
+    });
+    // Kiểm tra và xóa dòng 6 nếu đã tồn tại để tránh trùng lặp
+    worksheet.spliceRows(6, 1); // Xóa dòng 6 cũ nếu tồn tại
+
+    // Tiêu đề bảng 2 (B6 - G6)
+    const secondHeader = [
+      "Mã hàng\nHS code if avail", // B6
+      "Mô tả hàng hóa*\nDescription of Goods", // C6
+      "Tổng trọng lượng*\nGross weight", // D6
+      "Kích thước/thể tích *\nDimension/tonnage", // E6
+      "Số hiệu cont\nCont. number", // F6
+      "Số seal cont\nSeal number", // G6
+    ];
+
+    // Thêm tiêu đề bảng 2
+    const secondHeaderRow = worksheet.addRow(secondHeader);
+
+    // Định dạng tiêu đề bảng 2
+    secondHeaderRow.eachCell((cell, colNumber) => {
+      cell.font = { bold: true, color: { argb: "FFFFFFFF" }, size: 12 }; // Font trắng, chữ in đậm
+      cell.alignment = {
+        horizontal: "center",
+        vertical: "middle",
+        wrapText: true, // Tự động xuống dòng nếu quá dài
+      };
+      cell.fill = {
+        type: "pattern",
+        pattern: "solid",
+        fgColor: { argb: "0070C0" }, // Màu nền xanh
+      };
+
+      // Tạo viền xung quanh ô
+      cell.border = {
+        top: { style: "thin" },
+        left: { style: "thin" },
+        bottom: { style: "thin" },
+        right: { style: "thin" },
+      };
+
+      // Đặt độ rộng cột
+      worksheet.getColumn(colNumber + 2).width = 25; // Độ rộng tương ứng với cột (thêm 2 vì cột B bắt đầu ở index 2)
     });
 
     // Các trường dữ liệu bổ sung
