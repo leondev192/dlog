@@ -175,7 +175,7 @@ export const exportToExcel = async (aiResponse) => {
     };
 
     // Tiêu đề phụ
-    worksheet.mergeCells("A2:Y2");
+    worksheet.mergeCells("A2:H2");
     const subTitle = worksheet.getCell("A2");
     subTitle.value = "List of House Bill of Lading";
     subTitle.font = { bold: true, size: 12, color: { argb: "FFFFFFFF" } };
@@ -273,7 +273,7 @@ export const exportToExcel = async (aiResponse) => {
     // Tùy chỉnh độ rộng cột
     worksheet.columns = columnHeaders.map((header) => ({
       header: header,
-      width: Math.max(header.length, 50),
+      width: Math.max(header.length, 35),
     }));
 
     // Điền dữ liệu lấy từ AI vào các ô tương ứng
