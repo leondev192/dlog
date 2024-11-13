@@ -152,7 +152,7 @@ const MultiFileProcessor = () => {
 2. Bill of Lading No.: …(example HCMBKK029112022)
 3. Description of Goods (extract only the description): …(example FABRIC 100 PCT. POLYESTER W: 114 CM)
 4. Consignor/Shipper (include only company name and address): …(example MAC NELS SHIPPING VIETNAM CO., LTD, 29 PHO DỌC CHINH STR, DIST 1, HOCHIMINH CITY, VIETNAM)
-5. Consigned to Order of (include only company name and address): …(example TO THE ORDER OF THE HOLDER SURRENDERED)
+5. Consignee/Consigned to Order of (include only company name and address): …(example TO THE ORDER OF THE HOLDER SURRENDERED BBL NO. 1/DKK 290439 TO BE ISSUED BY MAC - NELS CONTAINER LINES )
 6. Notify Party (include only company name and address): …(example PRO LOG CO., LTD, 191/14 CTL TOWEL, 28TH FLOOR, RATCHADAPISE RD., KLONG TOEY BANGKOK 10110 THAILAND)
 7. Port of Loading (convert to port code using the table below if matched): …(example VNCLI)
 8. Port of Discharge (convert to port code using the table below if matched): …(example THBKK)
@@ -182,7 +182,6 @@ Use the following codes to convert kinds of packages:
 Please extract these details from the provided data, ensuring that both "Port of Loading" and "Port of Discharge" fields are replaced with the corresponding codes where applicable, that "Kind of Packages" is replaced with its corresponding code, and that both "Number and Kind of Packages, Description of Goods" and "Container & Seal No." are divided into separate fields as specified. Additionally, only extract the "Container No." if the text contains the "Consignor/Shipper" section.
 ${text}`;
   };
-
   const fillExcelTemplate = async () => {
     if (!aiResponse) {
       message.error("Please run AI processing to get the data.");
@@ -296,15 +295,30 @@ ${text}`;
           multiple
           accept=".pdf"
           onChange={handleFileChange}
-          fileList={selectedFiles.map((file) => ({
-            uid: file.uid,
-            name: file.name,
-            status: "done",
-          }))}
+          onRemove={(file) => {
+            const updatedFiles = selectedFiles.filter(
+              (selectedFile) => selectedFile.uid !== file.uid
+            );
+            setSelectedFiles(updatedFiles);
+            setAiResponse("");
+            setProgress(0);
+
+            if (updatedFiles.length === 0) {
+              message.info("No files selected. Ready for new upload.");
+            }
+          }}
+          fileList={selectedFiles
+            .filter((file) => file) // Bỏ qua các file bị undefined/null
+            .map((file, index) => ({
+              uid: index.toString(),
+              name: file.name || `Unnamed File ${index + 1}`, // Đảm bảo có tên mặc định nếu `name` undefined
+              status: "done",
+            }))}
           beforeUpload={() => false}
         >
           <Button icon={<UploadOutlined />}>Select PDF Files</Button>
         </Upload>
+
         <Divider />
         <Button type="primary" onClick={handleFileUpload} disabled={loading}>
           {loading ? (
