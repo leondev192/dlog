@@ -104,15 +104,17 @@ const MultiFileProcessor = () => {
   };
 
   const handleAskAI = async (combinedText) => {
+    // Step 1: Create a prompt from the input text
     const prompt = createPrompt(combinedText);
 
     try {
+      // Step 2: Send a request to the AI API
       const response = await axios.post(
         GEMINI_API_URL,
         {
           contents: [
             {
-              parts: [{ text: prompt }],
+              parts: [{ text: prompt }], // Prompt is embedded here
             },
           ],
         },
@@ -123,25 +125,39 @@ const MultiFileProcessor = () => {
         }
       );
 
-      if (response.data.candidates && response.data.candidates.length > 0) {
-        const pageData = parseAIResponse(
-          response.data.candidates[0].content.parts[0].text.trim()
-        );
+      // Step 3: Check if we received a valid response from the AI
+      if (
+        response.data &&
+        response.data.candidates &&
+        response.data.candidates.length > 0
+      ) {
+        // Extract the raw AI response text
+        const rawText =
+          response.data.candidates[0].content.parts[0].text.trim();
+        console.log("Raw AI response text:", rawText); // Log for debugging
 
+        // Step 4: Parse the raw text using `parseAIResponse`
+        const pageData = parseAIResponse(rawText);
+
+        // Step 5: Merge the parsed data with existing AI response data (if any)
         try {
-          const mergedData = mergeData(aiResponse, pageData);
-          setAiResponse(mergedData);
+          const mergedData = mergeData(aiResponse, pageData); // Use `mergeData` for consistency
+          console.log("Merged AI response data:", mergedData); // Debugging output
+          setAiResponse(mergedData); // Save the merged data to state
         } catch (error) {
+          // Handle inconsistencies in the data merge
           message.error(error.message);
           setLoading(false);
           return;
         }
       } else {
+        // If no candidates are returned, throw an error
         throw new Error("No response from Gemini AI.");
       }
     } catch (error) {
+      // Step 6: Log and show an error message if the request fails
       console.error("Error communicating with Gemini API:", error);
-      message.error("Error from AI API");
+      message.error("Error from AI API. Please try again later.");
     }
   };
 
@@ -184,49 +200,103 @@ ${text}`;
   };
   const fillExcelTemplate = async () => {
     if (!aiResponse) {
-      message.error("Please run AI processing to get the data.");
+      message.error(
+        "No data available for export. Please run AI processing first."
+      );
       return;
     }
 
     try {
+      // Create a new workbook and worksheet
       const workbook = new ExcelJS.Workbook();
       const worksheet = workbook.addWorksheet("Danh Sách Vận Đơn Gom Hàng");
 
-      worksheet.mergeCells("A1:X1");
-      worksheet.getCell("A1").value =
+      // Title row
+      worksheet.mergeCells("A1:P1");
+      const titleCell = worksheet.getCell("A1");
+      titleCell.value =
         "DANH SÁCH VẬN ĐƠN GOM HÀNG (List of House bill of lading)";
-      worksheet.getCell("A1").alignment = {
-        vertical: "middle",
-        horizontal: "center",
-      };
-      worksheet.getCell("A1").font = { bold: true, size: 14 };
-
-      const fieldMappings = {
-        "Vận đơn chính (M-B/L)": "A2",
-        "Bill of Lading No.": "B2",
-        "Description of Goods": "C2",
-        "Consignor/Shipper": "D2",
-        "Consigned to Order of": "E2",
-        "Notify Party": "F2",
-        "Port of Loading": "G2",
-        "Port of Discharge": "H2",
-        "Đến cảng (Terminal)": "I2",
-        "Number of Packages": "J2",
-        "Kind of Packages": "K2",
-        "Container No.": "L2",
-        "Seal No.": "M2",
-        "Gross Weight": "N2",
-        "CBM/Volume": "O2",
-        "Place and Date of Issue": "P2", // Đảm bảo tiêu đề đầy đủ
+      titleCell.font = { bold: true, size: 14 };
+      titleCell.alignment = { vertical: "middle", horizontal: "center" };
+      titleCell.fill = {
+        type: "pattern",
+        pattern: "solid",
+        fgColor: { argb: "FF4CAF50" }, // Green background
       };
 
-      const extractedData = parseAIResponse(aiResponse);
+      // Define headers
+      const headers = [
+        "Vận đơn chính (M-B/L)",
+        "Bill of Lading No.",
+        "Description of Goods",
+        "Consignor/Shipper",
+        "Consigned to Order of",
+        "Notify Party",
+        "Port of Loading",
+        "Port of Discharge",
+        "Đến cảng (Terminal)",
+        "Number of Packages",
+        "Kind of Packages",
+        "Container No.",
+        "Seal No.",
+        "Gross Weight",
+        "CBM/Volume",
+        "Place and Date of Issue",
+      ];
 
-      for (const [key, cellAddress] of Object.entries(fieldMappings)) {
-        worksheet.getCell(cellAddress).value =
-          extractedData[key] || "Not found";
-      }
+      // Add header row with styling
+      const headerRow = worksheet.addRow(headers);
+      headerRow.eachCell((cell, colNumber) => {
+        cell.font = { bold: true, color: { argb: "FFFFFFFF" } };
+        cell.fill = {
+          type: "pattern",
+          pattern: "solid",
+          fgColor: { argb: "FF2196F3" }, // Blue background
+        };
+        cell.alignment = { vertical: "middle", horizontal: "center" };
+        cell.border = {
+          top: { style: "thin" },
+          left: { style: "thin" },
+          bottom: { style: "thin" },
+          right: { style: "thin" },
+        };
+      });
 
+      // Extract AI response data and add it as a row
+      const dataRow = headers.map((header) => {
+        // Match headers with corresponding fields in aiResponse
+        return aiResponse[header] || "Not Available"; // Use "Not Available" if the field is missing
+      });
+
+      const contentRow = worksheet.addRow(dataRow);
+
+      // Style content row
+      contentRow.eachCell((cell, colNumber) => {
+        cell.alignment = { vertical: "middle", horizontal: "left" };
+        cell.border = {
+          top: { style: "thin" },
+          left: { style: "thin" },
+          bottom: { style: "thin" },
+          right: { style: "thin" },
+        };
+        if (colNumber % 2 === 0) {
+          cell.fill = {
+            type: "pattern",
+            pattern: "solid",
+            fgColor: { argb: "FFF5F5F5" }, // Light gray for alternate columns
+          };
+        }
+      });
+
+      // Adjust column widths
+      worksheet.columns.forEach((column, index) => {
+        column.width = Math.max(
+          headers[index]?.length || 10,
+          Math.min(30, (dataRow[index]?.toString().length || 10) + 2)
+        );
+      });
+
+      // Save and download the file
       const buffer = await workbook.xlsx.writeBuffer();
       const blob = new Blob([buffer], {
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
@@ -241,13 +311,15 @@ ${text}`;
       message.error("Error exporting the Excel file.");
     }
   };
-  const mergeData = (existingData, newData) => {
-    if (!existingData) return newData;
 
-    // Kiểm tra dữ liệu có khớp hay không
+  // Merge new AI data with existing data
+  const mergeData = (existingData, newData) => {
+    if (!existingData) return newData; // If there's no existing data, just return the new data.
+
+    // Ensure consistency between existing and new data
     const isConsistent = Object.keys(existingData).every(
       (key) =>
-        existingData[key] === newData[key] || newData[key] === "Not found"
+        existingData[key] === newData[key] || newData[key] === "Not Available"
     );
 
     if (!isConsistent) {
@@ -260,6 +332,14 @@ ${text}`;
   };
 
   const parseAIResponse = (response) => {
+    if (typeof response !== "string") {
+      console.error(
+        "parseAIResponse expects a string, but got:",
+        typeof response
+      );
+      throw new Error("Invalid AI response format. Expected a string.");
+    }
+
     const patterns = {
       "Vận đơn chính (M-B/L)": /Vận đơn chính \(M-B\/L\): (.+)/,
       "Bill of Lading No.": /Bill of Lading No.: (.+)/,
@@ -282,7 +362,7 @@ ${text}`;
     const data = {};
     for (const [key, regex] of Object.entries(patterns)) {
       const match = response.match(regex);
-      data[key] = match ? match[1].trim() : null;
+      data[key] = match ? match[1].trim() : "Not Available";
     }
     return data;
   };
