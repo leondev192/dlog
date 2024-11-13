@@ -1,0 +1,191 @@
+/* Import animate.css for predefined animations */
+@import "https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css";
+
+/* Container styling with a subtle gradient background */
+.multi-file-processor {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 20px;
+  background: linear-gradient(
+    135deg,
+    #a0d2eb,
+    #4f81bd
+  ); /* Light to darker blue gradient */
+  min-height: 100vh;
+  animation: fadeIn 1s ease;
+}
+
+/* Main card with shadow, rounded edges, and hover effect */
+.main-card {
+  width: 100%;
+  max-width: 600px;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  background-color: #ffffff;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.main-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.2);
+}
+
+/* Title with centered, bold text, and dark blue color */
+.title {
+  text-align: center;
+  color: #2e4a73;
+  font-weight: 700;
+  font-size: 1.6rem;
+  margin-bottom: 20px;
+  animation: bounceInDown 1s ease; /* Animated bounce-in effect */
+}
+
+/* Upload button with blue gradient background and smooth animations */
+.upload-button {
+  background: linear-gradient(90deg, #4f81bd, #3a66a0);
+  color: white;
+  border: none;
+  width: 100%;
+  margin: 15px 0;
+  border-radius: 8px;
+  padding: 12px 0;
+  font-weight: bold;
+  transition: background 0.3s, transform 0.3s;
+}
+
+.upload-button:hover {
+  background: linear-gradient(90deg, #3a66a0, #4f81bd);
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.upload-button:active {
+  transform: scale(0.98);
+}
+
+/* Process button with primary blue gradient and animation */
+.process-button {
+  width: 100%;
+  height: 50px;
+  margin: 15px 0;
+  border-radius: 8px;
+  font-weight: bold;
+  color: white;
+  background: linear-gradient(90deg, #4f81bd, #3a66a0);
+  transition: background-color 0.3s, transform 0.3s;
+  animation: fadeInUp 0.8s ease; /* Slide-up with fade effect */
+}
+
+.process-button:hover {
+  background: linear-gradient(90deg, #3a66a0, #4f81bd);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.process-button:active {
+  transform: scale(0.98);
+}
+
+/* Progress bar styling for loading feedback */
+.progress-bar {
+  width: 100%;
+  margin-top: 15px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* Card for displaying AI response */
+.ai-response-card {
+  width: 100%;
+  margin-top: 20px;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  background-color: #ffffff;
+  animation: fadeInUp 0.8s ease;
+}
+
+/* Export button with a green gradient and pulsing animation */
+.export-button {
+  background: linear-gradient(90deg, #28a745, #218838);
+  color: white;
+  width: 100%;
+  border-radius: 8px;
+  margin-top: 10px;
+  padding: 12px 0;
+  font-weight: bold;
+  transition: background 0.3s, transform 0.3s;
+  animation: pulse 1.5s infinite; /* Pulse animation to attract attention */
+}
+
+.export-button:hover {
+  background: linear-gradient(90deg, #218838, #28a745);
+  transform: scale(1.05);
+}
+
+.export-button:active {
+  transform: scale(0.98);
+}
+
+/* Divider styling for spacing and color */
+.ant-divider {
+  border-top: 1px solid #e0e0e0;
+  margin: 20px 0;
+}
+
+/* Animation for initial fade-in */
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Fade-in and scale-up effect */
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Pulse animation for buttons */
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Responsive adjustments for mobile */
+@media (max-width: 768px) {
+  .main-card {
+    max-width: 100%;
+    padding: 15px;
+  }
+
+  .upload-button,
+  .process-button,
+  .export-button {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .title {
+    font-size: 1.4rem;
+  }
+}

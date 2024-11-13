@@ -147,7 +147,7 @@ function IndexNavbar() {
               <Button
                 className="btn-round"
                 color="while"
-                href="https://www.creative-tim.com/product/paper-kit-pro-react?ref=pkr-index-navbar"
+                href="/ai"
                 target="_blank"
               >
                 <i className="nc-icon nc-spaceship"></i> CONTACT US

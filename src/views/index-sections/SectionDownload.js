@@ -61,7 +61,7 @@ function SectionDownload() {
               </p>
             </Col>
             <Col className="ml-auto mr-auto" sm="5">
-              <Button className="btn-round" color="info" href="#pablo" disabled>
+              <Button className="btn-round" color="info" disabled>
                 <i aria-hidden={true} className="nc-icon nc-spaceship" />{" "}
                 CONTACT US
               </Button>
