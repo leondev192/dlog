@@ -161,7 +161,7 @@ const MultiFileProcessor = () => {
 11. Kind of Packages (convert to code using the table below if matched): …(example CT)
 12. Container No. (Extract only the container number from the contain of which file contains the information "Consignor” or “Shipper"): …(example CSLU2082865)
 13. Seal No. (Extract only the seal number from the contain of which file contains the information "Consignor” or “Shipper"):  …(example 21567932)
-14. Gross Weight (extract only the number): …(example 64.64)
+14. Gross Weight (extract only the numeric value, ensuring commas as thousand separators are removed and decimal points are retained for fractional values): …(example 1899.58)
 15. CBM/Volume (extract only the number): …(example 1.000)
 16. Place and Date of Issue (extract only the date and format as dd/mm/yyyy): …(example 01/12/2022).
 
