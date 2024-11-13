@@ -1,191 +1,133 @@
-/* Import animate.css for predefined animations */
-@import "https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css";
-
-/* Container styling with a subtle gradient background */
 .multi-file-processor {
+  background: linear-gradient(145deg, #1e1e2f, #25253a);
+  min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: column;
-  padding: 20px;
-  background: linear-gradient(
-    135deg,
-    #a0d2eb,
-    #4f81bd
-  ); /* Light to darker blue gradient */
-  min-height: 100vh;
-  animation: fadeIn 1s ease;
+  color: #fff;
+  font-family: "Arial", sans-serif;
 }
 
-/* Main card with shadow, rounded edges, and hover effect */
 .main-card {
-  width: 100%;
-  max-width: 600px;
-  border-radius: 12px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-  background-color: #ffffff;
+  width: 90%;
+  max-width: 800px;
+  background: #1e1e2f;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  border-radius: 15px;
   overflow: hidden;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  animation: fadeInUp 0.5s ease-out;
+  position: relative;
 }
 
-.main-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.2);
-}
-
-/* Title with centered, bold text, and dark blue color */
-.title {
-  text-align: center;
-  color: #2e4a73;
-  font-weight: 700;
-  font-size: 1.6rem;
-  margin-bottom: 20px;
-  animation: bounceInDown 1s ease; /* Animated bounce-in effect */
-}
-
-/* Upload button with blue gradient background and smooth animations */
-.upload-button {
-  background: linear-gradient(90deg, #4f81bd, #3a66a0);
-  color: white;
-  border: none;
+.main-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
-  margin: 15px 0;
-  border-radius: 8px;
-  padding: 12px 0;
-  font-weight: bold;
-  transition: background 0.3s, transform 0.3s;
+  height: 100%;
+  z-index: -1;
+  border-radius: 15px;
+  background: linear-gradient(45deg, #6a11cb, #2575fc);
+  animation: borderAnimation 2s linear infinite;
+}
+
+.upload-section {
+  padding: 10px;
+  text-align: center;
+}
+
+.upload-button {
+  background: linear-gradient(90deg, #6a11cb, #2575fc);
+  color: #fff;
+  border: none;
+  border-radius: 30px;
+  font-size: 16px;
+  transition: all 0.3s ease;
 }
 
 .upload-button:hover {
-  background: linear-gradient(90deg, #3a66a0, #4f81bd);
-  transform: scale(1.05);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transform: scale(1.1);
+  background: linear-gradient(90deg, #2575fc, #6a11cb);
 }
 
-.upload-button:active {
-  transform: scale(0.98);
-}
-
-/* Process button with primary blue gradient and animation */
 .process-button {
-  width: 100%;
-  height: 50px;
-  margin: 15px 0;
-  border-radius: 8px;
+  background: linear-gradient(90deg, #6a11cb, #2575fc);
+  color: #fff;
+  border: none;
+  border-radius: 30px;
+  font-size: 18px;
   font-weight: bold;
-  color: white;
-  background: linear-gradient(90deg, #4f81bd, #3a66a0);
-  transition: background-color 0.3s, transform 0.3s;
-  animation: fadeInUp 0.8s ease; /* Slide-up with fade effect */
+  transition: all 0.3s ease;
 }
 
 .process-button:hover {
-  background: linear-gradient(90deg, #3a66a0, #4f81bd);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  transform: scale(1.1);
+  background: linear-gradient(90deg, #2575fc, #6a11cb);
 }
 
-.process-button:active {
-  transform: scale(0.98);
-}
-
-/* Progress bar styling for loading feedback */
-.progress-bar {
-  width: 100%;
-  margin-top: 15px;
-  border-radius: 8px;
-  overflow: hidden;
-}
-
-/* Card for displaying AI response */
 .ai-response-card {
-  width: 100%;
   margin-top: 20px;
-  border-radius: 12px;
-  padding: 20px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  background-color: #ffffff;
-  animation: fadeInUp 0.8s ease;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  padding: 15px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  animation: fadeIn 0.5s ease-out;
 }
 
-/* Export button with a green gradient and pulsing animation */
 .export-button {
-  background: linear-gradient(90deg, #28a745, #218838);
-  color: white;
-  width: 100%;
-  border-radius: 8px;
-  margin-top: 10px;
-  padding: 12px 0;
+  background: linear-gradient(90deg, #6a11cb, #2575fc);
+  color: #fff;
+  border: none;
+  border-radius: 30px;
+  font-size: 18px;
   font-weight: bold;
-  transition: background 0.3s, transform 0.3s;
-  animation: pulse 1.5s infinite; /* Pulse animation to attract attention */
+  transition: all 0.3s ease;
 }
 
 .export-button:hover {
-  background: linear-gradient(90deg, #218838, #28a745);
-  transform: scale(1.05);
+  transform: scale(1.1);
+  background: linear-gradient(90deg, #2575fc, #6a11cb);
 }
 
-.export-button:active {
-  transform: scale(0.98);
+.progress-bar {
+  margin-top: 20px;
 }
 
-/* Divider styling for spacing and color */
-.ant-divider {
-  border-top: 1px solid #e0e0e0;
-  margin: 20px 0;
-}
-
-/* Animation for initial fade-in */
 @keyframes fadeIn {
-  0% {
+  from {
     opacity: 0;
+    transform: translateY(10px);
   }
-  100% {
-    opacity: 1;
-  }
-}
-
-/* Fade-in and scale-up effect */
-@keyframes fadeInUp {
-  0% {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  100% {
+  to {
     opacity: 1;
     transform: translateY(0);
   }
 }
 
-/* Pulse animation for buttons */
-@keyframes pulse {
-  0% {
-    transform: scale(1);
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
   }
-  50% {
-    transform: scale(1.05);
-  }
-  100% {
-    transform: scale(1);
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
-/* Responsive adjustments for mobile */
-@media (max-width: 768px) {
-  .main-card {
-    max-width: 100%;
-    padding: 15px;
+@keyframes borderAnimation {
+  0% {
+    background-position: 0% 50%;
   }
+  100% {
+    background-position: 100% 50%;
+  }
+}
 
-  .upload-button,
-  .process-button,
-  .export-button {
-    font-size: 14px;
-    padding: 10px;
-  }
-
-  .title {
-    font-size: 1.4rem;
-  }
+body {
+  margin: 0;
+  background: linear-gradient(145deg, #141428, #1e1e2f);
+  color: white;
+  font-family: "Arial", sans-serif;
 }
