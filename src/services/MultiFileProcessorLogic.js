@@ -270,7 +270,7 @@ export const exportToExcel = async (aiResponse) => {
 
     // Add Table 1 Headers
     const table1HeaderRow = worksheet.addRow(table1Headers);
-    table1HeaderRow.height = 30; // Set a taller height for Table 1 header
+    table1HeaderRow.height = 40; // Set a taller height for Table 1 header
     // Add Table 1 Headers with color formatting
     table1Headers.forEach((header, index) => {
       const cell = worksheet.getCell(3, index + 1); // Assuming headers start at row 3
@@ -324,7 +324,7 @@ export const exportToExcel = async (aiResponse) => {
 
     for (let rowIndex = startRowTable1; rowIndex <= endRowTable1; rowIndex++) {
       const row = worksheet.getRow(rowIndex);
-      row.height = 25; // Adjust row height
+      row.height = 40; // Adjust row height
       row.eachCell({ includeEmpty: true }, (cell) => {
         cell.alignment = {
           horizontal: "center",
