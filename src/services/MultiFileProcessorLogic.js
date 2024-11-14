@@ -225,8 +225,8 @@ export const exportToExcel = async (aiResponse) => {
     // Subtitle
     worksheet.mergeCells("A2:H2");
     const subTitle = worksheet.getCell("A2");
-    subTitle.value = "List of House Bill of Lading";
-    subTitle.font = { size: 12, color: { argb: "FF000000" } }; // Black color
+    subTitle.value = "(List of House Bill of Lading)";
+    subTitle.font = { size: 14, color: { argb: "FF000000" } }; // Black color
     subTitle.alignment = { horizontal: "center", vertical: "middle" };
     subTitle.fill = {
       type: "pattern",
