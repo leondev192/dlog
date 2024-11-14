@@ -78,8 +78,6 @@ export const sendToGemini = async (combinedText) => {
     throw new Error(`Gemini API error: ${error.message}`);
   }
 };
-
-// Create AI prompt
 export const createPrompt = (text) => `
 Extract the following information from the text provided, formatting each detail on a new line and omitting unnecessary information (such as telephone and fax numbers unless specifically requested). Use the examples for clarity:
 
@@ -96,7 +94,7 @@ Extract the following information from the text provided, formatting each detail
 11. Kind of Packages (convert to code using the table below if matched): …(example CT)
 12. Container No. (Extract only the container number from the contain of which file contains the information "Consignor” or “Shipper"): …(example CSLU2082865)
 13. Seal No. (Extract only the seal number from the contain of which file contains the information "Consignor” or “Shipper"):  …(example 21567932)
-14. Gross Weight (extract only the number): …(example 64.64)
+14. Gross Weight (extract only the number): …(example 1,899.58)
 15. CBM/Volume (extract only the number): …(example 1.000)
 16. Place and Date of Issue (extract only the date and format as dd/mm/yyyy): …(example 01/12/2022).
 
@@ -116,11 +114,16 @@ Use the following codes to convert kinds of packages:
 
 Please extract these details from the provided data, ensuring that both "Port of Loading" and "Port of Discharge" fields are replaced with the corresponding codes where applicable, that "Kind of Packages" is replaced with its corresponding code, and that both "Number and Kind of Packages, Description of Goods" and "Container & Seal No." are divided into separate fields as specified. Additionally, only extract the "Container No." if the text contains the "Consignor/Shipper" section.
 
-If the text does not contain any relevant information, respond with  Tin nhắn:"Không có dữ liệu."
+If mandatory fields are missing, respond with:
+"Thiếu thông tin quan trọng: [List of Missing Fields]. Vui lòng kiểm tra và tải lên file có đầy đủ các trường dữ liệu yêu cầu."
+
+If all fields are missing, respond with:
+"Không đủ dữ liệu để hoàn tất một bản khai sơ lược hàng hóa! Vui lòng tải lên file chứng từ chính xác hơn."
 
 Text input:
 ${text}
 `;
+
 export const parseAIResponse = (response) => {
   if (typeof response !== "string") {
     throw new Error("Invalid AI response format. Expected a string.");
@@ -146,25 +149,33 @@ export const parseAIResponse = (response) => {
   };
 
   const data = {};
-  let allFieldsMissing = true; // Flag to check if all fields are missing
+  const missingFields = []; // Track missing fields
 
   for (const [key, regex] of Object.entries(patterns)) {
     const match = response.match(regex);
     if (match) {
       data[key] = match[1].trim();
-      allFieldsMissing = false; // At least one field has data
+    } else {
+      missingFields.push(key); // Add missing field to the list
     }
   }
 
-  // If all fields are missing, return with custom message
-  if (allFieldsMissing) {
+  // If all fields are missing, return with a custom message
+  if (missingFields.length === Object.keys(patterns).length) {
     return {
       "Thông báo":
-        "Không đủ dữ liệu để hoàn tất một bản khai sơ lược hàng hóa!",
+        "Không đủ dữ liệu để hoàn tất một bản khai sơ lược hàng hóa! Vui lòng tải lên file chứng từ chính xác hơn.",
     };
   }
 
-  return data; // Return data if fields exist
+  // If some fields are missing, notify the user with the missing fields
+  if (missingFields.length > 0) {
+    data["Thông báo"] = `Thiếu thông tin quan trọng: ${missingFields.join(
+      ", "
+    )}. Vui lòng kiểm tra và tải lên file có đầy đủ các trường dữ liệu yêu cầu.`;
+  }
+
+  return data; // Return the data including missing field notifications if applicable
 };
 
 // Merge existing and new AI data

@@ -184,7 +184,7 @@ const MultiFileProcessor = () => {
               }
             >
               Tải file chứng từ lên bằng cách nhấn <strong>"Chọn File"</strong>{" "}
-              (PDF hoặc ảnh).
+              (Chỉ upload file PDF).
             </Timeline.Item>
             <Timeline.Item
               dot={
