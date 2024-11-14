@@ -204,79 +204,148 @@ export const exportToExcel = async (aiResponse) => {
     const workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet("Danh Sách Vận Đơn Gom Hàng");
 
-    // Tiêu đề chính
+    // Main Title
     worksheet.mergeCells("A1:H1");
     const mainTitle = worksheet.getCell("A1");
     mainTitle.value = "DANH SÁCH VẬN ĐƠN GOM HÀNG";
-    mainTitle.font = { bold: true, size: 16, color: { argb: "FFFFFFFF" } };
+    mainTitle.font = { size: 16, color: { argb: "FF000000" } }; // Black color
     mainTitle.alignment = { horizontal: "center", vertical: "middle" };
     mainTitle.fill = {
       type: "pattern",
       pattern: "solid",
-      fgColor: { argb: "0070C0" },
+      fgColor: { argb: "FF00B0F0" }, // Light blue background
+    };
+    mainTitle.border = {
+      top: { style: "medium", color: { argb: "FF000000" } }, // Black border
+      left: { style: "medium", color: { argb: "FF000000" } },
+      bottom: { style: "medium", color: { argb: "FF000000" } },
+      right: { style: "medium", color: { argb: "FF000000" } },
     };
 
-    // Tiêu đề phụ
+    // Subtitle
     worksheet.mergeCells("A2:H2");
     const subTitle = worksheet.getCell("A2");
     subTitle.value = "List of House Bill of Lading";
-    subTitle.font = { bold: true, size: 12, color: { argb: "FFFFFFFF" } };
+    subTitle.font = { size: 12, color: { argb: "FF000000" } }; // Black color
     subTitle.alignment = { horizontal: "center", vertical: "middle" };
     subTitle.fill = {
       type: "pattern",
       pattern: "solid",
-      fgColor: { argb: "0070C0" },
+      fgColor: { argb: "FF00B0F0" }, // Light blue background
+    };
+    subTitle.border = {
+      top: { style: "medium", color: { argb: "FF000000" } }, // Black border
+      left: { style: "medium", color: { argb: "FF000000" } },
+      bottom: { style: "medium", color: { argb: "FF000000" } },
+      right: { style: "medium", color: { argb: "FF000000" } },
     };
 
-    // Thêm tiêu đề cột
-    const columnHeaders = [
-      "STT (*)",
-      "Số hồ sơ",
-      "Năm đăng ký hồ sơ",
-      "Chức năng của chứng từ",
-      "Người gửi hàng",
-      "Người nhận hàng",
-      "Người được thông báo 1",
-      "Người được thông báo 2",
-      "Mã Cảng chuyển tải/quá cảnh",
-      "Mã Cảng giao hàng/cảng đích",
-      "Mã Cảng xếp hàng",
-      "Mã Cảng dỡ hàng",
-      "Địa điểm giao hàng",
-      "Loại hàng",
-      "Số vận đơn",
-      "Ngày phát hành vận đơn",
-      "Số vận đơn gốc",
-      "Ngày phát hành vận đơn gốc",
-      "Ngày khởi hành",
-      "Tổng số kiện",
-      "Loại kiện",
-      "Tổng trọng lượng",
-      "Đơn vị tính tổng trọng lượng",
-      "Ghi chú",
+    // === Table 1 ===
+    const table1Headers = [
+      "STT (*)\nNo",
+      "Số hồ sơ\nDocument's No",
+      "Năm đăng ký hồ sơ\nDocument's Year",
+      "Chức năng của chứng từ\nDocument's function",
+      "Người gửi hàng*\nShipper",
+      "Người nhận hàng*\nConsignee",
+      "Người được thông báo 1\nNotify Party 1",
+      "Danh sách vận đơn gom hàng\nNotify Party 2",
+      "Mã Cảng chuyển tải/quá cảnh\nCode of Port of transhipment/transit",
+      "Mã Cảng giao hàng/cảng đích\nFinal destination",
+      "Mã Cảng xếp hàng\nCode of Port of Loading",
+      "Mã Cảng dỡ hàng\nPort of unloading/discharging",
+      "Địa điểm giao hàng*\nPlace of Delivery",
+      "Loại hàng*\nCargo Type/Terms of Shipment",
+      "Số vận đơn *\nBill of lading number",
+      "Ngày phát hành vận đơn*\nDate of house bill of lading",
+      "Số vận đơn gốc*\nMaster bill of lading number",
+      "Ngày phát hành vận đơn gốc*\nDate of master bill of lading",
+      "Ngày khởi hành*\nDeparture date",
+      "Tổng số kiện*\nNumber of packages",
+      "Loại kiện*\nKind of packages",
+      "Tổng trọng lượng*\nTotal gross weight",
+      "Đơn vị tính tổng trọng lượng*\nTotal gross weight unit",
+      "Ghi chú\nRemark",
     ];
 
-    // Thêm hàng tiêu đề
-    const headerRow = worksheet.addRow(columnHeaders);
+    // Add Table 1 Headers
+    const table1HeaderRow = worksheet.addRow(table1Headers);
+    table1HeaderRow.height = 30; // Set a taller height for Table 1 header
+    // Add Table 1 Headers with color formatting
+    table1Headers.forEach((header, index) => {
+      const cell = worksheet.getCell(3, index + 1); // Assuming headers start at row 3
+      const [vietnamese, english] = header.split("\n"); // Split header into Vietnamese and English parts
 
-    // Định dạng tiêu đề cột
-    headerRow.eachCell((cell) => {
-      cell.font = { bold: true, color: { argb: "FFFFFFFF" } };
-      cell.alignment = { horizontal: "center", vertical: "middle" };
+      cell.value = {
+        richText: [
+          {
+            text: vietnamese,
+            font: { color: { argb: "FFFF0000" }, bold: true }, // Red for Vietnamese
+          },
+          { text: "\n" }, // Line break
+          { text: english, font: { color: { argb: "FF000000" } } }, // Black for English
+        ],
+      };
+
+      cell.alignment = {
+        horizontal: "center",
+        vertical: "middle",
+        wrapText: true, // Enable text wrapping for multi-line headers
+      };
       cell.fill = {
         type: "pattern",
         pattern: "solid",
-        fgColor: { argb: "4F81BD" },
+        fgColor: { argb: "FFDCEBF7" }, // Light blue background (#dcebf7)
+      };
+      cell.border = {
+        top: { style: "thin" },
+        left: { style: "thin" },
+        bottom: { style: "thin" },
+        right: { style: "thin" },
       };
     });
 
-    // Tùy chỉnh độ rộng cột
-    worksheet.columns = columnHeaders.map((header) => ({
-      header: header,
-      width: Math.max(header.length, 35),
-    }));
+    // Auto-adjust column widths for Table 1
+    // Auto-adjust column widths for Table 1
+    table1Headers.forEach((_, index) => {
+      const column = worksheet.getColumn(index + 1);
+      column.width = 20;
+      column.eachCell({ includeEmpty: true }, (cell) => {
+        const textLength = String(cell.value || "").length;
+        if (textLength > column.width) {
+          column.width = textLength + 2;
+        }
+      });
+    });
 
-    // Điền dữ liệu lấy từ AI vào các ô tương ứng
+    // Adjust Row Height and Background Color for Table 1
+    const startRowTable1 = 4; // Content starts from row 4
+    const endRowTable1 = worksheet.lastRow.number;
+
+    for (let rowIndex = startRowTable1; rowIndex <= endRowTable1; rowIndex++) {
+      const row = worksheet.getRow(rowIndex);
+      row.height = 25; // Adjust row height
+      row.eachCell({ includeEmpty: true }, (cell) => {
+        cell.alignment = {
+          horizontal: "center",
+          vertical: "middle",
+          wrapText: true,
+        };
+        cell.fill = {
+          type: "pattern",
+          pattern: "solid",
+          fgColor: { argb: "FFFFFACD" }, // Light Yellow Background
+        };
+        cell.border = {
+          top: { style: "thin" },
+          left: { style: "thin" },
+          bottom: { style: "thin" },
+          right: { style: "thin" },
+        };
+      });
+    }
+
+    // Add AI-Populated Data for Table 1
     const fieldsMapping = [
       {
         position: "Q4",
@@ -288,7 +357,6 @@ export const exportToExcel = async (aiResponse) => {
         key: "Bill of Lading No.",
         header: "Bill of Lading No.",
       },
-
       { position: "E4", key: "Consignor/Shipper", header: "Consignor/Shipper" },
       {
         position: "F4",
@@ -297,6 +365,7 @@ export const exportToExcel = async (aiResponse) => {
       },
       { position: "K4", key: "Port of Loading", header: "Port of Loading" },
       { position: "L4", key: "Port of Discharge", header: "Port of Discharge" },
+      { position: "J4", key: "Port of Discharge", header: "Port of Discharge" },
       {
         position: "M4",
         key: "Đến cảng (Terminal)",
@@ -308,16 +377,8 @@ export const exportToExcel = async (aiResponse) => {
         header: "Number of Packages",
       },
       { position: "U4", key: "Kind of Packages", header: "Kind of Packages" },
-
       {
         position: "P4",
-        key: "Place and Date of Issue",
-        header: "Place and Date of Issue",
-      },
-      { position: "D4", key: "Gross Weight", header: "Gross Weight" },
-      { position: "V4", key: "Gross Weight", header: "Gross Weight" },
-      {
-        position: "S4",
         key: "Place and Date of Issue",
         header: "Place and Date of Issue",
       },
@@ -327,124 +388,195 @@ export const exportToExcel = async (aiResponse) => {
         header: "Place and Date of Issue",
       },
       {
-        position: "P4",
+        position: "S4",
         key: "Place and Date of Issue",
         header: "Place and Date of Issue",
       },
-      { position: "J4", key: "Port of Discharge", header: "Port of Discharge" },
       { position: "G4", key: "Notify Party", header: "Notify Party" },
-
-      { position: "F8", key: "Container No.", header: "Container No." },
-      { position: "G8", key: "Seal No.", header: "Seal No." },
-      { position: "D8", key: "Gross Weight", header: "Gross Weight" },
-      { position: "E8", key: "CBM/Volume", header: "CBM/Volume" },
-      {
-        position: "C8",
-        key: "Description of Goods",
-        header: "Description of Goods",
-      },
+      { position: "V4", key: "Gross Weight", header: "Gross Weight" },
     ];
 
-    fieldsMapping.forEach(({ position, key, header }) => {
-      const value = aiResponse[key] || "Not Available"; // Thay 'Not Available' bằng dữ liệu mặc định của bạn nếu có
-      worksheet.getCell(position).value = value;
-      worksheet.getCell(position).font = {
-        bold: true,
-        color: { argb: "FF000000" },
-      };
-      worksheet.getCell(position).alignment = {
-        horizontal: "center",
-        vertical: "middle",
-      };
-      worksheet.getCell(position).fill = {
-        type: "pattern",
-        pattern: "solid",
-        fgColor: { argb: "E7E6E6" },
-      };
-    });
-    // Kiểm tra và xóa dòng 6 nếu đã tồn tại để tránh trùng lặp
-    worksheet.spliceRows(6, 1); // Xóa dòng 6 cũ nếu tồn tại
-
-    // Tiêu đề bảng 2 (B6 - G6)
-    const secondHeader = [
-      "Mã hàng\nHS code if avail", // B6
-      "Mô tả hàng hóa*\nDescription of Goods", // C6
-      "Tổng trọng lượng*\nGross weight", // D6
-      "Kích thước/thể tích *\nDimension/tonnage", // E6
-      "Số hiệu cont\nCont. number", // F6
-      "Số seal cont\nSeal number", // G6
-    ];
-
-    // Thêm tiêu đề bảng 2
-    const secondHeaderRow = worksheet.addRow(secondHeader);
-
-    // Định dạng tiêu đề bảng 2
-    secondHeaderRow.eachCell((cell, colNumber) => {
-      cell.font = { bold: true, color: { argb: "FFFFFFFF" }, size: 12 }; // Font trắng, chữ in đậm
-      cell.alignment = {
-        horizontal: "center",
-        vertical: "middle",
-        wrapText: true, // Tự động xuống dòng nếu quá dài
-      };
-      cell.fill = {
-        type: "pattern",
-        pattern: "solid",
-        fgColor: { argb: "0070C0" }, // Màu nền xanh
-      };
-
-      // Tạo viền xung quanh ô
-      cell.border = {
-        top: { style: "thin" },
-        left: { style: "thin" },
-        bottom: { style: "thin" },
-        right: { style: "thin" },
-      };
-
-      // Đặt độ rộng cột
-      worksheet.getColumn(colNumber + 2).width = 25; // Độ rộng tương ứng với cột (thêm 2 vì cột B bắt đầu ở index 2)
+    fieldsMapping.forEach(({ position, key }) => {
+      const cell = worksheet.getCell(position);
+      cell.value = aiResponse[key] || "Not Available";
+      cell.font = { color: { argb: "FF000000" } };
+      cell.alignment = { horizontal: "center", vertical: "middle" };
+      //   cell.fill = {
+      //     type: "pattern",
+      //     pattern: "solid",
+      //     fgColor: { argb: "E7E6E6" },
+      //   };
     });
 
-    // Các trường dữ liệu bổ sung
+    // Add Predefined Sample Data for Table 1
     const additionalFields = [
       { position: "A4", value: "1", header: "STT (*)" },
       { position: "B4", value: " ", header: "Số hồ sơ" },
       { position: "C4", value: "2024", header: "Năm đăng ký hồ sơ" },
       { position: "D4", value: "CN01", header: "Chức năng của chứng từ" },
-      { position: "H4", value: " ", header: "Người được thông báo 2" },
-      {
-        position: "I4",
-        value: " ",
-        header: "Mã Cảng chuyển tải/quá cảnh",
-      },
+      { position: "H4", value: " ", header: "Danh sách vận đơn gom hàng" },
+      { position: "I4", value: " ", header: "Mã Cảng chuyển tải/quá cảnh" },
       { position: "N4", value: "CFS-CFS", header: "Loại hàng" },
       {
         position: "R4",
         value: "Place and Date of Issue",
         header: "Ngày phát hành vận đơn gốc",
       },
-      { position: "S4", value: " ", header: "Ngày khởi hành" },
       { position: "W4", value: "KGM", header: "Đơn vị tính tổng trọng lượng" },
       { position: "X4", value: " ", header: "Ghi chú" },
     ];
 
-    additionalFields.forEach(({ position, value, header }) => {
-      worksheet.getCell(position).value = value;
-      worksheet.getCell(position).font = {
-        bold: true,
-        color: { argb: "FF000000" },
+    additionalFields.forEach(({ position, value }) => {
+      const cell = worksheet.getCell(position);
+      cell.value = value;
+      cell.font = { color: { argb: "FF000000" } };
+      cell.alignment = { horizontal: "center", vertical: "middle" };
+      //   cell.fill = {
+      //     type: "pattern",
+      //     pattern: "solid",
+      //     fgColor: { argb: "E7E6E6" },
+      //   };
+    });
+
+    // Add spacing between tables
+
+    worksheet.addRow([]); // Add a blank row
+    worksheet.getRow(worksheet.lastRow.number).height = 15; // Set height for the spacer row
+
+    // === Table 2 ===
+    const table2Headers = [
+      "Mã hàng\nHS code if avail",
+      "Mô tả hàng hóa*\nDescription of Goods",
+      "Tổng trọng lượng*\nGross weight",
+      "Kích thước/thể tích *\nDimension/tonnage",
+      "Số hiệu cont\nCont. number",
+      "Số seal cont\nSeal number",
+    ];
+
+    // Add Table 2 Headers
+    // Add Table 2 Headers starting from column B
+    const table2HeaderRow = worksheet.addRow([]);
+    worksheet.getRow(table2HeaderRow.number).getCell(2).value =
+      "Mã hàng\nHS code if avail";
+    worksheet.getRow(table2HeaderRow.number).getCell(3).value =
+      "Mô tả hàng hóa*\nDescription of Goods";
+    worksheet.getRow(table2HeaderRow.number).getCell(4).value =
+      "Tổng trọng lượng*\nGross weight";
+    worksheet.getRow(table2HeaderRow.number).getCell(5).value =
+      "Kích thước/thể tích *\nDimension/tonnage";
+    worksheet.getRow(table2HeaderRow.number).getCell(6).value =
+      "Số hiệu cont\nCont. number";
+    worksheet.getRow(table2HeaderRow.number).getCell(7).value =
+      "Số seal cont\nSeal number";
+    table2HeaderRow.height = 25; // Set a taller height for Table 2 header
+    // Add Table 2 Headers with color formatting starting from row 6 and column B
+    table2Headers.forEach((header, index) => {
+      const cell = worksheet.getCell(6, index + 2); // Headers start at row 6, column B
+      const [vietnamese, english] = header.split("\n"); // Split header into Vietnamese and English parts
+
+      cell.value = {
+        richText: [
+          {
+            text: vietnamese,
+            font: { color: { argb: "FFFF0000" }, bold: true }, // Red for Vietnamese
+          },
+          { text: "\n" }, // Line break
+          { text: english, font: { color: { argb: "FF000000" } } }, // Black for English
+        ],
       };
-      worksheet.getCell(position).alignment = {
+
+      cell.alignment = {
         horizontal: "center",
         vertical: "middle",
+        wrapText: true, // Enable text wrapping for multi-line headers
       };
-      worksheet.getCell(position).fill = {
+      cell.fill = {
         type: "pattern",
         pattern: "solid",
-        fgColor: { argb: "E7E6E6" },
+        fgColor: { argb: "FFDCEBF7" }, // Light blue background (#dcebf7)
+      };
+      cell.border = {
+        top: { style: "thin" },
+        left: { style: "thin" },
+        bottom: { style: "thin" },
+        right: { style: "thin" },
       };
     });
 
-    // Lưu file Excel
+    // Auto-adjust column width based on content
+    table2Headers.forEach((_, index) => {
+      const column = worksheet.getColumn(index + 2); // Columns start from B (index + 2)
+      column.width = 20; // Default width to start with
+      column.eachCell({ includeEmpty: true }, (cell) => {
+        const textLength = String(cell.value || "").length;
+        if (textLength > column.width) {
+          column.width = textLength + 2; // Adjust width based on content, add padding
+        }
+      });
+    });
+
+    // Add Table 2 Data
+    // Add Table 2 Data directly below headers
+    const table2Fields = [
+      { position: "B7", key: "HS Code", header: "Mã hàng" }, // Updated to ensure it starts at B7
+      {
+        position: "C7",
+        key: "Description of Goods",
+        header: "Description of Goods",
+      },
+      { position: "D7", key: "Gross Weight", header: "Gross Weight" },
+      { position: "E7", key: "CBM/Volume", header: "Dimension/Tonnage" },
+      { position: "F7", key: "Container No.", header: "Cont. number" },
+      { position: "G7", key: "Seal No.", header: "Seal number" },
+    ];
+
+    // Table 2 Fields Content
+    table2Fields.forEach(({ position, key }) => {
+      const cell = worksheet.getCell(position);
+      cell.value = aiResponse[key] || " ";
+
+      // Font settings
+      cell.font = { color: { argb: "FF000000" } }; // Black text
+
+      // Alignment
+      cell.alignment = {
+        horizontal: "center",
+        vertical: "middle",
+        wrapText: true, // Enable text wrapping
+      };
+
+      // Background color (yellow)
+      //   cell.fill = {
+      //     type: "pattern",
+      //     pattern: "solid",
+      //     fgColor: { argb: "FFFFFACD" }, // Light Yellow Background (#FFFACD)
+      //   };
+    });
+
+    // Adjust Row Height for Table 2
+    const startRowTable2 = 7; // Assuming Table 2 content starts from row 7
+    const endRowTable2 = worksheet.lastRow.number; // Automatically adjust to the last row of Table 2
+
+    for (let rowIndex = startRowTable2; rowIndex <= endRowTable2; rowIndex++) {
+      const row = worksheet.getRow(rowIndex);
+      row.height = 25; // Dynamically increase row height
+      row.eachCell({ includeEmpty: true }, (cell) => {
+        // Additional alignment for content
+        cell.alignment = {
+          horizontal: "center",
+          vertical: "middle",
+          wrapText: true, // Enable text wrapping for multi-line content
+        };
+        // Ensure consistent yellow background for all content cells
+        // cell.fill = {
+        //   type: "pattern",
+        //   pattern: "solid",
+        //   fgColor: { argb: "FFFFFACD" }, // Light Yellow Background (#FFFACD)
+        // };
+      });
+    }
+
+    // Save File
     const buffer = await workbook.xlsx.writeBuffer();
     const blob = new Blob([buffer], {
       type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
@@ -452,7 +584,7 @@ export const exportToExcel = async (aiResponse) => {
 
     const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
-    link.download = "Danh_Sach_Van_Don_Gom_Hang.xlsx";
+    link.download = "MANIFEST.xlsx";
     link.click();
   } catch (error) {
     console.error("Error exporting Excel file:", error);
