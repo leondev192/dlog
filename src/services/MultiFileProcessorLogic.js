@@ -417,11 +417,7 @@ export const exportToExcel = async (aiResponse) => {
       { position: "H4", value: " ", header: "Người được thông báo 2" },
       { position: "I4", value: " ", header: "Mã Cảng chuyển tải/quá cảnh" },
       { position: "N4", value: "CFS-CFS", header: "Loại hàng" },
-      {
-        position: "R4",
-        value: "Place and Date of Issue",
-        header: "Ngày phát hành vận đơn gốc",
-      },
+
       { position: "W4", value: "KGM", header: "Đơn vị tính tổng trọng lượng" },
       { position: "X4", value: " ", header: "Ghi chú" },
     ];
