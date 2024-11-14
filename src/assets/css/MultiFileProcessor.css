@@ -1,7 +1,7 @@
 /* Nền toàn bộ trang */
 body {
   margin: 0;
-  background: linear-gradient(135deg, #0d0d0d, #1a1a1a); /* Nền đen */
+  background: linear-gradient(135deg, #0d0d0d, #000000); /* Nền đen */
   font-family: "Roboto", sans-serif;
   color: #ffffff;
 }
@@ -37,7 +37,7 @@ body {
   right: -2px;
   bottom: -2px;
   border-radius: 15px;
-  background: linear-gradient(45deg, #ff7eb3, #6a11cb, #2575fc);
+  background: linear-gradient(45deg, #090909, #00f7ff);
   z-index: -1;
 }
 
@@ -53,7 +53,7 @@ body {
 .upload-button,
 .process-button,
 .reset-button {
-  background: linear-gradient(90deg, #6a11cb, #2575fc);
+  background: linear-gradient(90deg, #090909, #00f7ff);
   color: #ffffff;
   border: none;
   border-radius: 50px;
@@ -67,8 +67,8 @@ body {
 .upload-button:hover,
 .process-button:hover,
 .reset-button:hover {
-  background: linear-gradient(90deg, #2575fc, #6a11cb);
-  color: #ffd700; /* Vàng khi hover */
+  background: linear-gradient(90deg, #090909, #00f7ff);
+  color: #ffffff;
   transform: scale(1.05);
 }
 
@@ -79,7 +79,7 @@ body {
   border-radius: 15px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
   margin-top: 30px;
-  border-left: 5px solid #6a11cb;
+  border-left: 5px solid #00f7ff;
 }
 
 /* Căn chỉnh phần thời gian hướng dẫn */
@@ -96,7 +96,7 @@ body {
 
 /* Thanh tiến trình */
 .ant-progress-bg {
-  background: linear-gradient(90deg, #6a11cb, #2575fc);
+  background: linear-gradient(90deg, #000000, #00f7ff);
 }
 
 /* Modal kết quả */

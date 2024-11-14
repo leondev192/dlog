@@ -59,13 +59,6 @@ const MultiFileProcessor = () => {
     setAiResponse({});
   };
 
-  const handleResetFiles = () => {
-    setSelectedFiles([]);
-    setAiResponse({});
-    setProgress(0);
-    message.info("Danh sách file đã được làm mới.");
-  };
-
   const handleFileUpload = async () => {
     if (selectedFiles.length === 0) {
       message.error("Vui lòng chọn ít nhất một file PDF!");
@@ -184,7 +177,7 @@ const MultiFileProcessor = () => {
             <Timeline.Item
               dot={
                 <UploadOutlined
-                  style={{ fontSize: "20px", color: "#6a11cb" }}
+                  style={{ fontSize: "20px", color: "#000000" }}
                 />
               }
             >
@@ -193,7 +186,7 @@ const MultiFileProcessor = () => {
             <Timeline.Item
               dot={
                 <LoadingOutlined
-                  style={{ fontSize: "20px", color: "#6a11cb" }}
+                  style={{ fontSize: "20px", color: "#000000" }}
                 />
               }
             >
@@ -203,7 +196,7 @@ const MultiFileProcessor = () => {
             <Timeline.Item
               dot={
                 <FileExcelOutlined
-                  style={{ fontSize: "20px", color: "#6a11cb" }}
+                  style={{ fontSize: "20px", color: "#000000" }}
                 />
               }
             >
@@ -225,7 +218,7 @@ const MultiFileProcessor = () => {
             >
               <span
                 style={{
-                  background: "linear-gradient(90deg, #6a11cb, #2575fc)",
+                  background: "linear-gradient(90deg, #000000, #00f7ff)",
                   WebkitBackgroundClip: "text",
                   WebkitTextFillColor: "transparent",
                 }}

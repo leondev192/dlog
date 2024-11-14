@@ -1,7 +1,6 @@
 import axios from "axios";
 import * as pdfjsLib from "pdfjs-dist";
 import ExcelJS from "exceljs";
-import { message } from "antd";
 
 // Constants
 const GOOGLE_VISION_API_KEY = "AIzaSyBQpg9s-125r-xeyOG5N3dqNDY9mdkLIQw";
@@ -82,7 +81,7 @@ export const sendToGemini = async (combinedText) => {
 
 // Create AI prompt
 export const createPrompt = (text) => `
-Extract the following information from the text provided, formatting each detail on a new line and omitting unnecessary information:
+Extract the following information from the text provided. Only display the fields with valid data. If no valid data is found for any field, respond with: "Không có dữ liệu".
 
 1. Vận đơn chính (M-B/L): Example PLN00203022
 2. Bill of Lading No.: Example HCMBKK029112022
@@ -101,9 +100,11 @@ Extract the following information from the text provided, formatting each detail
 15. CBM/Volume: Example 1.000
 16. Place and Date of Issue: Example 01/12/2022
 
-${text}`;
+If the text does not contain any relevant information, respond with "Không có dữ liệu."
 
-// Parse AI response into structured data
+Text input:
+${text}
+`;
 export const parseAIResponse = (response) => {
   if (typeof response !== "string") {
     throw new Error("Invalid AI response format. Expected a string.");
@@ -129,10 +130,23 @@ export const parseAIResponse = (response) => {
   };
 
   const data = {};
+  let allFieldsMissing = true; // Flag to check if all fields are missing
+
   for (const [key, regex] of Object.entries(patterns)) {
     const match = response.match(regex);
-    data[key] = match ? match[1].trim() : "Not Available";
+    if (match) {
+      data[key] = match[1].trim();
+      allFieldsMissing = false; // Có ít nhất 1 trường hợp có dữ liệu
+    }
   }
+
+  // Nếu tất cả các trường đều không có thông tin
+  if (allFieldsMissing) {
+    return {
+      message: "Không đủ thông tin của 1 bộ Manifest!",
+    };
+  }
+
   return data;
 };
 
@@ -365,13 +379,13 @@ export const exportToExcel = async (aiResponse) => {
     // Các trường dữ liệu bổ sung
     const additionalFields = [
       { position: "A4", value: "1", header: "STT (*)" },
-      { position: "B4", value: "không cần điền", header: "Số hồ sơ" },
+      { position: "B4", value: " ", header: "Số hồ sơ" },
       { position: "C4", value: "2024", header: "Năm đăng ký hồ sơ" },
       { position: "D4", value: "CN01", header: "Chức năng của chứng từ" },
-      { position: "H4", value: "không điền", header: "Người được thông báo 2" },
+      { position: "H4", value: " ", header: "Người được thông báo 2" },
       {
         position: "I4",
-        value: "không điền",
+        value: " ",
         header: "Mã Cảng chuyển tải/quá cảnh",
       },
       { position: "N4", value: "CFS-CFS", header: "Loại hàng" },
@@ -380,9 +394,9 @@ export const exportToExcel = async (aiResponse) => {
         value: "Place and Date of Issue",
         header: "Ngày phát hành vận đơn gốc",
       },
-      { position: "S4", value: "không điền", header: "Ngày khởi hành" },
+      { position: "S4", value: " ", header: "Ngày khởi hành" },
       { position: "W4", value: "KGM", header: "Đơn vị tính tổng trọng lượng" },
-      { position: "X4", value: "không điền", header: "Ghi chú" },
+      { position: "X4", value: " ", header: "Ghi chú" },
     ];
 
     additionalFields.forEach(({ position, value, header }) => {
