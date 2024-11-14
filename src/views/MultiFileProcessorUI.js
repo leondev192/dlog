@@ -6,7 +6,6 @@ import {
   Modal,
   Typography,
   message,
-  Table,
   Card,
   Space,
   Timeline,
@@ -15,7 +14,6 @@ import {
 import {
   UploadOutlined,
   LoadingOutlined,
-  DeleteOutlined,
   FileExcelOutlined,
 } from "@ant-design/icons";
 import {
@@ -37,7 +35,7 @@ const MultiFileProcessor = () => {
   const [showModal, setShowModal] = useState(false);
 
   const typingText =
-    "Hãy tải file PDF của bạn lên, sau đó nhấn nút để bắt đầu xử lý.";
+    "Tải lên các file chứng từ, hệ thống sẻ phân tích và tạo bản khai Manifest.";
   const [typedText, setTypedText] = useState("");
   const [typingIndex, setTypingIndex] = useState(0);
 
@@ -61,7 +59,7 @@ const MultiFileProcessor = () => {
 
   const handleFileUpload = async () => {
     if (selectedFiles.length === 0) {
-      message.error("Vui lòng chọn ít nhất một file PDF!");
+      message.error("Vui lòng chọn ít nhất một file chứng từ!");
       return;
     }
 
@@ -82,7 +80,7 @@ const MultiFileProcessor = () => {
       const parsedData = parseAIResponse(rawAiResponse);
       const mergedData = mergeData(aiResponse, parsedData);
       setAiResponse(mergedData);
-      message.success("Xử lý AI hoàn tất!");
+      message.success("Trích xuất dữ liệu và xử lý hoàn tất!");
       setShowModal(true);
     } catch (error) {
       console.error("Error during processing:", error);
@@ -96,10 +94,10 @@ const MultiFileProcessor = () => {
   const handleExportToExcel = async () => {
     try {
       await exportToExcel(aiResponse);
-      message.success("Xuất file Excel thành công!");
+      message.success("Xuất file Excel Manifest thành công!");
     } catch (error) {
       console.error("Error exporting to Excel:", error);
-      message.error("Xuất file không thành công. Vui lòng thử lại.");
+      message.error("Không thể xuất file Excel. Vui lòng thử lại.");
     }
   };
 
@@ -125,14 +123,18 @@ const MultiFileProcessor = () => {
     <div className="multi-file-processor">
       <Card className="main-card" bordered>
         <Title level={2} className="title">
-          Bộ Xử Lý PDF AI
+          Hệ Thống Tự Động Hóa Khai Báo Manifest
         </Title>
         <Paragraph>{typedText}</Paragraph>
 
-        <Card title="Tải File Lên" bordered style={{ marginBottom: "20px" }}>
+        <Card
+          title="Tải Lên Chứng Từ"
+          bordered
+          style={{ marginBottom: "20px" }}
+        >
           <Upload
             multiple
-            accept=".pdf"
+            accept=".pdf,.png,.jpg"
             onChange={handleFileChange}
             fileList={selectedFiles.map((file, index) => ({
               uid: index.toString(),
@@ -142,7 +144,7 @@ const MultiFileProcessor = () => {
             beforeUpload={() => false}
           >
             <Button icon={<UploadOutlined />} className="upload-button">
-              Chọn File PDF
+              Chọn File
             </Button>
           </Upload>
         </Card>
@@ -159,7 +161,7 @@ const MultiFileProcessor = () => {
                 <LoadingOutlined spin /> Đang Xử Lý...
               </>
             ) : (
-              "Xử Lý File"
+              "Xử Lý Chứng Từ"
             )}
           </Button>
           {loading && (
@@ -181,7 +183,8 @@ const MultiFileProcessor = () => {
                 />
               }
             >
-              Tải file PDF lên bằng cách nhấn <strong>"Chọn File PDF"</strong>.
+              Tải file chứng từ lên bằng cách nhấn <strong>"Chọn File"</strong>{" "}
+              (PDF hoặc ảnh).
             </Timeline.Item>
             <Timeline.Item
               dot={
@@ -190,8 +193,8 @@ const MultiFileProcessor = () => {
                 />
               }
             >
-              Nhấn nút <strong>"Xử Lý File"</strong> để hệ thống phân tích dữ
-              liệu.
+              Nhấn nút <strong>"Xử Lý Chứng Từ"</strong> để hệ thống phân tích
+              dữ liệu.
             </Timeline.Item>
             <Timeline.Item
               dot={
@@ -200,7 +203,7 @@ const MultiFileProcessor = () => {
                 />
               }
             >
-              Xem kết quả hoặc xuất file Excel để lưu trữ.
+              Xuất dữ liệu ra file Excel Manifest để lưu trữ hoặc kiểm tra.
             </Timeline.Item>
           </Timeline>
         </Card>
@@ -220,11 +223,10 @@ const MultiFileProcessor = () => {
                 style={{
                   background: "linear-gradient(90deg, #000000, #00f7ff)",
                   WebkitBackgroundClip: "text",
-
                   WebkitTextFillColor: "transparent",
                 }}
               >
-                Kết Quả Xử Lý
+                Kết Quả Trích Xuất
               </span>
             </div>
           }
