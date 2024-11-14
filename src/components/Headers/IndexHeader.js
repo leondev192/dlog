@@ -58,7 +58,7 @@ function IndexHeader() {
           }}
         />
         <h6 className="category category-absolute">
-          Designed and coded by VAN QUYET
+          Designed and coded by Team D-Log
         </h6>
       </div>
     </>

@@ -414,7 +414,7 @@ export const exportToExcel = async (aiResponse) => {
       { position: "B4", value: " ", header: "Số hồ sơ" },
       { position: "C4", value: "2024", header: "Năm đăng ký hồ sơ" },
       { position: "D4", value: "CN01", header: "Chức năng của chứng từ" },
-      { position: "H4", value: " ", header: "Danh sách vận đơn gom hàng" },
+      { position: "H4", value: " ", header: "Người được thông báo 2" },
       { position: "I4", value: " ", header: "Mã Cảng chuyển tải/quá cảnh" },
       { position: "N4", value: "CFS-CFS", header: "Loại hàng" },
       {

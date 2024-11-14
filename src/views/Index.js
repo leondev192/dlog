@@ -51,7 +51,7 @@ function Index() {
   });
   return (
     <>
-      <IndexNavbar />
+      {/* <IndexNavbar /> */}
       <IndexHeader />
       <div className="main">
         {/* <SectionButtons />

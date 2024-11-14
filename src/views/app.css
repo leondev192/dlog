@@ -1,0 +1,139 @@
+/* General Theme */
+body {
+  margin: 0;
+  font-family: "Courier New", monospace;
+  background-color: #0d0d0d;
+  color: #00ffcc;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
+/* Dark Theme Base */
+.dark-theme {
+  background-color: #0d0d0d;
+  color: #00ffcc;
+}
+
+/* Full-Screen Hero Section */
+.hero-section {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 20px;
+}
+
+.logo {
+  width: 80px;
+  margin-bottom: 20px;
+  filter: brightness(0) invert(1);
+  animation: flicker 1.5s infinite alternate;
+}
+
+.hero-title {
+  font-size: 2.5rem;
+  color: #00ffcc;
+  text-shadow: 0px 0px 10px #00ffcc;
+  margin: 0;
+}
+
+.hero-subtitle {
+  font-size: 1.5rem;
+  color: #ffffff;
+  text-shadow: 0px 0px 8px #ff00cc;
+  margin: 10px 0;
+}
+
+.hero-text {
+  max-width: 600px;
+  font-size: 1.1rem;
+  color: #b3b3b3;
+  text-shadow: 0px 0px 4px #ff00cc;
+  margin-bottom: 30px;
+}
+
+.hero-button {
+  padding: 15px 35px;
+  font-size: 1.2rem;
+  color: #0d0d0d;
+  background-color: #00ffcc;
+  border: 2px solid #ff00cc;
+  border-radius: 8px;
+  text-transform: uppercase;
+  font-weight: bold;
+  box-shadow: 0px 8px 15px rgba(255, 0, 204, 0.4);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.hero-button:hover {
+  background-color: #ff00cc;
+  color: #ffffff;
+  border-color: #00ffcc;
+  transform: scale(1.05);
+  box-shadow: 0px 8px 15px rgba(0, 255, 204, 0.5);
+}
+
+/* MultiFileProcessor Page */
+.processor-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #ffffff;
+}
+
+.section-title {
+  font-size: 2.5rem;
+  color: #ff00cc;
+  text-shadow: 0px 0px 10px #ff00cc;
+  margin-bottom: 20px;
+  animation: glitch 1.5s infinite;
+}
+
+.processor-container p {
+  font-size: 1.2rem;
+  color: #b3b3b3;
+  max-width: 600px;
+}
+
+/* Animations */
+@keyframes flicker {
+  0%,
+  19%,
+  21%,
+  23%,
+  25%,
+  54%,
+  56%,
+  100% {
+    opacity: 1;
+  }
+  20%,
+  24%,
+  55% {
+    opacity: 0;
+  }
+}
+
+@keyframes glitch {
+  0% {
+    text-shadow: 2px 2px #ff00cc, -2px -2px #00ffcc;
+  }
+  25% {
+    text-shadow: -2px -2px #ff00cc, 2px 2px #00ffcc;
+  }
+  50% {
+    text-shadow: -2px 2px #ff00cc, 2px -2px #00ffcc;
+  }
+  75% {
+    text-shadow: 2px -2px #ff00cc, -2px 2px #00ffcc;
+  }
+  100% {
+    text-shadow: 2px 2px #ff00cc, -2px -2px #00ffcc;
+  }
+}
