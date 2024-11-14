@@ -220,6 +220,7 @@ const MultiFileProcessor = () => {
                 style={{
                   background: "linear-gradient(90deg, #000000, #00f7ff)",
                   WebkitBackgroundClip: "text",
+
                   WebkitTextFillColor: "transparent",
                 }}
               >

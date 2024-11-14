@@ -100,7 +100,7 @@ Extract the following information from the text provided. Only display the field
 15. CBM/Volume: Example 1.000
 16. Place and Date of Issue: Example 01/12/2022
 
-If the text does not contain any relevant information, respond with "Không có dữ liệu."
+If the text does not contain any relevant information, respond with  Tin nhắn:"Không có dữ liệu."
 
 Text input:
 ${text}
@@ -136,18 +136,19 @@ export const parseAIResponse = (response) => {
     const match = response.match(regex);
     if (match) {
       data[key] = match[1].trim();
-      allFieldsMissing = false; // Có ít nhất 1 trường hợp có dữ liệu
+      allFieldsMissing = false; // At least one field has data
     }
   }
 
-  // Nếu tất cả các trường đều không có thông tin
+  // If all fields are missing, return with custom message
   if (allFieldsMissing) {
     return {
-      message: "Không đủ thông tin của 1 bộ Manifest!",
+      "Thông báo":
+        "Không đủ dữ liệu để hoàn tất một bản khai sơ lược hàng hóa!",
     };
   }
 
-  return data;
+  return data; // Return data if fields exist
 };
 
 // Merge existing and new AI data
