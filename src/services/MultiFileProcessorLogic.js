@@ -249,7 +249,7 @@ export const exportToExcel = async (aiResponse) => {
       "Người gửi hàng*\nShipper",
       "Người nhận hàng*\nConsignee",
       "Người được thông báo 1\nNotify Party 1",
-      "Danh sách vận đơn gom hàng\nNotify Party 2",
+      "Người được thông báo 2\nNotify Party 2",
       "Mã Cảng chuyển tải/quá cảnh\nCode of Port of transhipment/transit",
       "Mã Cảng giao hàng/cảng đích\nFinal destination",
       "Mã Cảng xếp hàng\nCode of Port of Loading",
